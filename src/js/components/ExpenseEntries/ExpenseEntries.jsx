@@ -1,4 +1,7 @@
 import React from "react";
+
+//We'll need to import all those action creators
+
 import {
   updateExpenseDescription,
   updateExpenseAmount,
@@ -8,12 +11,18 @@ import {
 export default class ExpenseEntries extends React.Component {
   constructor(props) {
     super(props);
+
+    // Here we're bining these methods to the context
+    //of the components. This only has to be done,
+    //becasue these methods are called back by
+    //event emitters (which lose context).
     this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
     this.handleAmountInput = this.handleAmountInput.bind(this);
     this.handleAddExpense = this.handleAddExpense.bind(this);
   }
 
   handleDescriptionInput(event) {
+    // dispatch was provided by connect()
     const { dispatch } = this.props;
     const { value } = event.target;
     dispatch(updateExpenseDescription(value));
@@ -31,6 +40,7 @@ export default class ExpenseEntries extends React.Component {
   }
 
   render() {
+    // These values were provided by connect()
     const { description, amount, lineItems } = this.props;
     return (
       <div className="card border-danger mb-3">
@@ -68,17 +78,19 @@ export default class ExpenseEntries extends React.Component {
               + Add Expense
             </button>
             <table className="table table-sm table-hover">
-              <thead>
+              <thread>
                 <tr>
                   <th>Description</th>
                   <th style={{ width: 120 }}>Amount</th>
                 </tr>
-              </thead>
+              </thread>
               <tbody>
-                <tr>
-                  <td>Rent</td>
-                  <td>$1,500.00</td>
-                </tr>
+                {lineItems.map(lineItem => (
+                  <tr>
+                    <td>{lineItem.description}</td>
+                    <td>${lineItem.amount.toFixed(2)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </form>

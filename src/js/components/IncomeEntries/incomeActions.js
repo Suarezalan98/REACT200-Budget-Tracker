@@ -1,3 +1,4 @@
+// Action Creators
 export function updateIncomeDescription(description) {
   return {
     type: "UPDATE_INCOME_DESCRIPTION",
